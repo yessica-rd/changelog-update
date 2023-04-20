@@ -10,6 +10,8 @@ jobs:
   reject_pr_job:
     runs-on: ubuntu-latest
     steps:
+      - name: Install dependencies
+        run: npm install @actions/github
       - name: do-nothing
         run: echo "This job does nothing"
       - name: Set status
