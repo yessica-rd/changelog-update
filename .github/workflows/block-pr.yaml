@@ -1,0 +1,19 @@
+name: Block pull requests to main and run on merge of pull request from develop
+
+on:
+  pull_request:
+    branches:
+      - '**' # matches every branch
+      - '!main'
+      - 'fran-test*'
+jobs:
+  block-pull-requests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name
+        if: github.event.pull_request.base.ref == 'main'
+        run: |
+          if [ "$GITHUB_HEAD_REF" != "develop" ]; then
+            echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
+            exit 1
+          fi
