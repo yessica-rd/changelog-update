@@ -20,6 +20,13 @@ jobs:
               body: 'Pull request rejected! Pull requests to the main branch can only come from the develop branch.'
             };
             return github.rest.issues.createComment({...context.repo, issue_number: context.payload.pull_request.number, ...payload});
+
+      - name: Check branch name
+        if: github.event.pull_request.base.ref == 'main'
         run: |
-          exit 1
+          if [ "$GITHUB_HEAD_REF" != "develop" ]; then
+            echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
+            exit 1
+          fi
+
 
