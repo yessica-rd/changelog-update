@@ -19,7 +19,7 @@ jobs:
 
       - name: Set status check
         if: github.event_name == 'pull_request'
-        uses: peter-evans/create-pull-request-status@v5.0.0
+        uses: teamniteo/pull_request_status_action@v1.0.0
         with:
           token: ${{ secrets.TOKEN_CHANGELOG }}
           state: success
