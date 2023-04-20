@@ -1,4 +1,4 @@
-name: Rejecting Pull Requests to Main from branches other than develop.
+name: block-pr
 
 on:
   pull_request:
