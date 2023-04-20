@@ -20,4 +20,6 @@ jobs:
               body: 'Pull request rejected! Pull requests to the main branch can only come from the develop branch.'
             };
             return github.rest.issues.createComment({...context.repo, issue_number: context.payload.pull_request.number, ...payload});
+        run: |
+          exit 1
 
