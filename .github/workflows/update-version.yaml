@@ -13,14 +13,27 @@ jobs:
       - name: do-nothing
         run: echo "This job does nothing"
       - name: Set status
-        uses: Sibz/github-status-action@v1
+        uses: actions/github-script@v3
         with:
-          authToken: ${{ secrets.TOKEN_CHANGELOG }}
-          description: 'The reject_pr_job succeeded'
-          context: 'Test run'
-          state: 'success'
-          sha: ${{github.event.pull_request.head.sha || github.sha}}
-
+          script: |
+            const { context, github } = require('@actions/github');
+            const octokit = new github.getOctokit('${{ secrets.TOKEN_CHANGELOG }}');
+            const { data: statuses } = await octokit.rest.repos.listStatusesForRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+            });
+            const statusExists = statuses.some(status => status.context === 'reject_pr_job');
+            if (!statusExists) {
+              await octokit.rest.repos.createCommitStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                sha: context.sha,
+                state: 'success',
+                context: 'reject_pr_job',
+                description: 'The reject_pr_job succeeded',
+              });
+            } 
 
   run-on-merge:
     needs: reject_pr_job
