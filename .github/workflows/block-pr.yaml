@@ -13,6 +13,7 @@ jobs:
       - name: Check branch name
         if: github.event.pull_request.base.ref == 'main'
         run: |
+          echo $GITHUB_HEAD_REF
           if [ "$GITHUB_HEAD_REF" != "develop" ]; then
             echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
             exit 1
