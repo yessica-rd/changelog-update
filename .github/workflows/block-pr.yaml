@@ -11,8 +11,8 @@ jobs:
     steps:
       - name: Check branch name
         run: |
-          echo "-----"
-          echo $GITHUB_HEAD_REF
+          echo "GITHUB_HEAD_REF -- $GITHUB_HEAD_REF"
+          echo "github.event.pull_request.base.ref -- $github.event.pull_request.base.ref"
       
       - name: Check branch name
         if: github.event.pull_request.base.ref == 'main'
