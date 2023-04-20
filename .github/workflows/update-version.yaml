@@ -16,19 +16,19 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            const { github } = require('@actions/github');
-            const octokit = new github.getOctokit('${{ secrets.TOKEN_CHANGELOG }}');
+            const { github: gh } = require('@actions/github');
+            const octokit = new gh.getOctokit('${{ secrets.TOKEN_CHANGELOG }}');
             const { data: statuses } = await octokit.rest.repos.listStatusesForRef({
-              owner: github.context.repo.owner,
-              repo: github.context.repo.repo,
-              ref: github.context.sha,
+              owner: gh.context.repo.owner,
+              repo: gh.context.repo.repo,
+              ref: gh.context.sha,
             });
             const statusExists = statuses.some(status => status.context === 'reject_pr_job');
             if (!statusExists) {
               await octokit.rest.repos.createCommitStatus({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                sha: github.context.sha,
+                owner: gh.context.repo.owner,
+                repo: gh.context.repo.repo,
+                sha: gh.context.sha,
                 state: 'success',
                 context: 'reject_pr_job',
                 description: 'The reject_pr_job succeeded',
