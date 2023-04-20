@@ -30,7 +30,7 @@ jobs:
         uses: actions-js/push@master
         if: ${{env.should_add_last_changes_to_master == 'true'}}
         with:
-          github_token: ${{ secrets.TOKEN }}
+          github_token: ${{ secrets.TOKEN_CHANGELOG }}
           message: "Changelog version updated"
           tags: true
 
@@ -48,7 +48,7 @@ jobs:
         id: "tag_create"
         uses: rickstaa/action-create-tag@v1
         with:
-          github_token: ${{ secrets.TOKEN }}
+          github_token: ${{ secrets.TOKEN_CHANGELOG }}
           tag: ${{env.tag_name}}
           tag_exists_error: false
           message: ${{env.release_message}}
@@ -58,5 +58,5 @@ jobs:
         with:
           target: "develop"
           source: "main"
-          token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.TOKEN_CHANGELOG }}
           strategy_options: "ours"
