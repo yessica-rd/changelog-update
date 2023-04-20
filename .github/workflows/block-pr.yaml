@@ -10,10 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check branch name
-        if: github.event.pull_request.base.ref == 'main'
         run: |
           echo "-----"
           echo $GITHUB_HEAD_REF
+      
+      - name: Check branch name
+        if: github.event.pull_request.base.ref == 'main'
+        run: |
           if [ "$GITHUB_HEAD_REF" != "develop" ]; then
             echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
             exit 1
