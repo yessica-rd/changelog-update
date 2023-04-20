@@ -9,11 +9,10 @@ jobs:
   block-pull-requests:
     runs-on: ubuntu-latest
     steps:
-      - name: Check branch name
+      - name: Echo branch name
         run: |
           echo "GITHUB_HEAD_REF -- $GITHUB_HEAD_REF"
           echo "---"
-          echo github.event.pull_request.base.ref
       
       - name: Check branch name
         if:  == 'main'
