@@ -16,7 +16,7 @@ jobs:
       - name: Run the action # You would run your tests before this using the output to set state/desc
         uses: Sibz/github-status-action@v1
         with: 
-          authToken: ${{secrets.GITHUB_TOKEN}}
+          authToken: ${{secrets.TOKEN_CHANGELOG}}
           context: 'Test run'
           description: 'Passed'
           state: 'success'
