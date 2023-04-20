@@ -17,12 +17,4 @@ jobs:
             exit 1
           fi
 
-      - name: Set status check
-        if: github.event_name == 'pull_request'
-        uses: teamniteo/pull_request_status_action@v1.0.0
-        with:
-          token: ${{ secrets.TOKEN_CHANGELOG }}
-          state: success
-          description: 'PR is allowed to be merged'
-
 
