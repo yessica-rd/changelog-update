@@ -2,25 +2,14 @@ name: Rejecting Pull Requests to Main from branches other than develop.
 
 on:
   pull_request:
+    types: [opened]
     branches:
       - '**'
 
 jobs:
   reject_pr_job:
     runs-on: ubuntu-latest
-    steps:
-      - name: Rejecting PRs from branches other than develop.
-        if: ${{ github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref != 'develop' }}
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.TOKEN_CHANGELOG }}
-          script: |
-            const payload = {
-              event: 'COMMENT',
-              body: 'Pull request rejected! Pull requests to the main branch can only come from the develop branch.'
-            };
-            return github.rest.issues.createComment({...context.repo, issue_number: context.payload.pull_request.number, ...payload});
-
+    steps:      
       - name: Check branch name
         if: github.event.pull_request.base.ref == 'main'
         run: |
