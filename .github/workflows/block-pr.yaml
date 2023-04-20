@@ -2,7 +2,6 @@ name: Rejecting Pull Requests to Main from branches other than develop.
 
 on:
   pull_request:
-    types: [opened]
     branches:
       - '**'
 
