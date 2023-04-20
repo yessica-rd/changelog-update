@@ -4,9 +4,6 @@ on:
   pull_request:
     branches:
       - '**'
-  push:
-    branches:
-      - 'main'
 
 jobs:
   reject_pr_job:
@@ -19,5 +16,13 @@ jobs:
             echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
             exit 1
           fi
+
+      - name: Set status check
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-pull-request-status@v1.1.1
+        with:
+          token: ${{ secrets.TOKEN_CHANGELOG }}
+          state: success
+          description: 'PR is allowed to be merged'
 
 

@@ -1,9 +1,6 @@
 name: Changelog steps
 
 on:
-  workflow_run:
-    workflows: [block-pr]
-    types: [completed]
   pull_request:
     types: [closed]
     branches:
