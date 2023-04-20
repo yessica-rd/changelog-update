@@ -12,6 +12,14 @@ jobs:
     steps:
       - name: do-nothing
         run: echo "This job does nothing"
+      - name: Set status
+        uses: rtCamp/github-status-action@v2.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          state: success
+          description: 'The reject_pr_job succeeded'
+          context: reject_pr_job
+
 
   run-on-merge:
     needs: reject_pr_job
