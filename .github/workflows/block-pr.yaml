@@ -1,4 +1,4 @@
-name: Block pull requests to main and run on merge of pull request from develop
+name: Rejecting Pull Requests to Main from branches other than develop.
 
 on:
   pull_request:
@@ -6,18 +6,27 @@ on:
       - '**'
 
 jobs:
-  block-pull-requests:
+  reject_pr_job:
     runs-on: ubuntu-latest
     steps:
-      - name: Echo branch name
-        run: |
-          echo "GITHUB_HEAD_REF -- $GITHUB_HEAD_REF"
-          echo "---"
-      
+      - name: Rejecting PRs from branches other than develop.
+        if: ${{ github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref != 'develop' }}
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.TOKEN_CHANGELOG }}
+          script: |
+            const payload = {
+              event: 'COMMENT',
+              body: 'Pull request rejected! Pull requests to the main branch can only come from the develop branch.'
+            };
+            return github.rest.issues.createComment({...context.repo, issue_number: context.payload.pull_request.number, ...payload});
+
       - name: Check branch name
-        if:  == 'main'
+        if: github.event.pull_request.base.ref == 'main'
         run: |
           if [ "$GITHUB_HEAD_REF" != "develop" ]; then
             echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
             exit 1
           fi
+
+
