@@ -48,7 +48,6 @@ jobs:
         if: ${{env.should_add_last_changes_to_master == 'true'}}
         with:
           github_token: ${{ secrets.TOKEN_CHANGELOG }}
-          message: "Changelog version updated"
           tags: true
           force_with_lease: true
 
