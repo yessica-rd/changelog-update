@@ -25,10 +25,7 @@ jobs:
 
   run-on-merge:
     needs: reject_pr_job
-    permissions:
-      pull-requests: write
-      actions: write
-      repository-projects: write
+    permissions: write-all
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop'
     runs-on: ubuntu-latest
     steps:
