@@ -25,6 +25,8 @@ jobs:
 
   run-on-merge:
     needs: reject_pr_job
+    permissions:
+      pull-requests: write
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop'
     runs-on: ubuntu-latest
     steps:
@@ -47,7 +49,7 @@ jobs:
         uses: actions-js/push@master
         if: ${{env.should_add_last_changes_to_master == 'true'}}
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.TOKEN_CHANGELOG }}
           message: "Changelog version updated"
           tags: true
           force: true          
