@@ -44,12 +44,15 @@ jobs:
           echo "should_add_last_changes_to_master=$should_add_last_changes_to_master" >> $GITHUB_ENV
 
       - name: commit-push-changes
-        uses: ad-m/github-push-action@master
+        uses: dciborow/commit@0.0.2
         if: ${{env.should_add_last_changes_to_master == 'true'}}
         with:
           github_token: ${{ secrets.TOKEN_CHANGELOG }}
-          tags: true
-          force: true
+          push-branch: 'master'
+          commit-message: "Changelog version updated"
+          force-add: 'true'
+          force-push: 'true'
+          files: CHANGELOG.md VERSION
 
       - name: create tags
         if: ${{env.should_add_last_changes_to_master == 'true'}}
