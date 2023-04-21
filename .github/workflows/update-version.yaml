@@ -7,7 +7,25 @@ on:
       - main
 
 jobs:
+  reject_pr_job_main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: do-nothing
+        run: echo "This job does nothing"
+      - name: Run the action # You would run your tests before this using the output to set state/desc
+        uses: Sibz/github-status-action@v1
+        with: 
+          authToken: ${{secrets.TOKEN_CHANGELOG}}
+          context: 'Test run'
+          description: 'Passed'
+          state: 'success'
+          sha: ${{github.event.pull_request.head.sha || github.sha}}
+
+
   run-on-merge:
+    needs: reject_pr_job_main
+    permissions: write-all
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop'
     runs-on: ubuntu-latest
     steps:
@@ -16,7 +34,9 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-
+          ref: main
+          token: ${{ secrets.TOKEN_CHANGELOG }}
+      
       - name: run-bash-file
         run: |
           git fetch 
@@ -30,9 +50,10 @@ jobs:
         uses: actions-js/push@master
         if: ${{env.should_add_last_changes_to_master == 'true'}}
         with:
-          github_token: ${{ secrets.TOKEN_CHANGELOG }}
+          github_token: ${{ secrets.GH_TOKEN }}
           message: "Changelog version updated"
           tags: true
+          force: true          
 
       - name: create tags
         if: ${{env.should_add_last_changes_to_master == 'true'}}
