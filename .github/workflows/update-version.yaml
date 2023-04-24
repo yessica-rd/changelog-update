@@ -18,8 +18,12 @@ jobs:
           ACTOR=$(echo "$GITHUB_CONTEXT" | jq -r '.actor')
           echo "Actor: $ACTOR"
           if [ $GITHUB_HEAD_REF != "develop" ]; then
+            echo "Entra"
             echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
             exit 1
+          else
+            echo "No entra"
+            exit 0
           fi
 
   run-on-merge:
