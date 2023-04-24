@@ -7,8 +7,6 @@ on:
       - main
 
 jobs:
-  call-workflow-1-in-local-repo:
-    uses: ./.github/workflows/block-pr.yaml
   run-on-merge:
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop'
     runs-on: ubuntu-latest
@@ -20,6 +18,12 @@ jobs:
           persist-credentials: false
           ref: main
           token: ${{ secrets.TOKEN_CHANGELOG }}
+
+      - name: Invoke block-pr.yaml
+        uses: ./.github/workflows/block-pr.yaml
+        with:
+          GITHUB_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          GITHUB_ACTOR: ${{ github.actor }}
       
       - name: run-bash-file
         run: |

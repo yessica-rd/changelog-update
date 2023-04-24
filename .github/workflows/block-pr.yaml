@@ -1,20 +1,19 @@
 name: block-pr
 
 on:
-  workflow_call:
   pull_request:
+    types: [closed]
     branches:
       - main
 
 jobs:
   reject_pr_job:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.head.ref != 'develop' && github.actor != 'github-actions[bot]'
+    if: github.event.pull_request.head.ref != 'develop' && github.actor != 'github-actions[bot]' && github.event.pull_request.base.ref == 'main' && github.event.pull_request.merged == true
     steps:
       - name: Check branch name
         env: 
           GITHUB_CONTEXT: ${{ toJson(github) }} 
-        if: github.event.pull_request.base.ref == 'main'
         run: |
           echo $GITHUB_HEAD_REF
           ACTOR=$(echo "$GITHUB_CONTEXT" | jq -r '.actor')
