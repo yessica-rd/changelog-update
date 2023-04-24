@@ -11,10 +11,13 @@ jobs:
     if: github.event.pull_request.head.ref != 'develop' && github.actor != 'github-actions[bot]'
     steps:
       - name: Check branch name
+        env: 
+          GITHUB_CONTEXT: ${{ toJson(github) }} 
         if: github.event.pull_request.base.ref == 'main'
         run: |
           echo $GITHUB_HEAD_REF
           echo $github.actor
+          echo "$GITHUB_CONTEXT"
           echo "${{ github.actor }} is trying to merge ${GITHUB_HEAD_REF} into ${github.event.pull_request.base.ref}"
           if [ $GITHUB_HEAD_REF != "develop" ]; then
             echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
