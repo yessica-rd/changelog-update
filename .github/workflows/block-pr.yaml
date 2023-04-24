@@ -18,6 +18,7 @@ jobs:
           echo $GITHUB_HEAD_REF
           echo $github.actor
           echo "$GITHUB_CONTEXT"
+          echo "$GITHUB_CONTEXT.actor"
           echo "${{ github.actor }} is trying to merge ${GITHUB_HEAD_REF} into ${github.event.pull_request.base.ref}"
           if [ $GITHUB_HEAD_REF != "develop" ]; then
             echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
