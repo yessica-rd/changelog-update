@@ -28,15 +28,6 @@ jobs:
           echo $should_add_last_changes_to_master
           echo "should_add_last_changes_to_master=$should_add_last_changes_to_master" >> $GITHUB_ENV
 
-      - name: echo-variables
-        env: 
-          GITHUB_CONTEXT: ${{ toJson(github) }} 
-        run: |
-          echo "----------"
-          echo $GITHUB_HEAD_REF  
-          ACTOR=$(echo "$GITHUB_CONTEXT" | jq -r '.actor')
-          echo "Actor: $ACTOR"
-
       - name: commit-push-changes
         uses: actions-js/push@master
         if: ${{env.should_add_last_changes_to_master == 'true'}}
