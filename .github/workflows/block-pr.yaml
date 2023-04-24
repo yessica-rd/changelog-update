@@ -14,7 +14,10 @@ jobs:
         run: |
           echo "----"
           echo $GITHUB_HEAD_REF
-          if [ "$GITHUB_HEAD_REF" != "develop"  ||  "$GITHUB_HEAD_REF" != "main" ]; then
+          if [ $GITHUB_HEAD_REF != "develop" ]; then
+            echo "Entra"
             echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
             exit 1
+          else
+            echo "no entra"
           fi
