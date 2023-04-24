@@ -32,12 +32,13 @@ jobs:
         run: |
           git config user.name ${{ secrets.GITHUB_ACTOR }}
           git config user.email ${{ secrets.GITHUB_EMAIL }}
-        
+
       - name: Push changes
         if: ${{env.should_add_last_changes_to_master == 'true'}}
         run: |
           git checkout main
           git merge --no-ff "$GITHUB_HEAD_REF"
+          git commit --message "Changelog version updated [skip ci]"
           git push origin main
 
       - name: create tags
