@@ -15,6 +15,7 @@ jobs:
         run: |
           echo $GITHUB_HEAD_REF
           echo $github.actor
+          echo "$github.actor"
           if [ $GITHUB_HEAD_REF != "develop" ]; then
             echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
             exit 1

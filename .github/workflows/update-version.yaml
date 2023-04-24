@@ -7,8 +7,9 @@ on:
       - main
 
 jobs:
+  call-workflow-1-in-local-repo:
+    uses: .github/workflows/update-version.yaml
   run-on-merge:
-    permissions: write-all
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop'
     runs-on: ubuntu-latest
     steps:
