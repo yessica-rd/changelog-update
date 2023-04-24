@@ -30,6 +30,7 @@ jobs:
 
       - name: Configure Git
         run: |
+          echo "${{ secrets.GH_TOKEN }}" | git credential-helper store
           git config user.name ${{ secrets.GH_ACTOR }}
           git config user.email ${{ secrets.GH_EMAIL }}
 
