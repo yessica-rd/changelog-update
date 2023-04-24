@@ -30,8 +30,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config user.name ${{ secrets.GITHUB_ACTOR }}
-          git config user.email ${{ secrets.GITHUB_EMAIL }}
+          git config user.name ${{ secrets.GH_ACTOR }}
+          git config user.email ${{ secrets.GH_EMAIL }}
 
       - name: Push changes
         if: ${{env.should_add_last_changes_to_master == 'true'}}
