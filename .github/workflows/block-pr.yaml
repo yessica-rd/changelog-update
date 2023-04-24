@@ -8,9 +8,8 @@ on:
 jobs:
   reject_pr_job:
     runs-on: ubuntu-latest
-    steps:      
+    steps:
       - name: Check branch name
-        if: github.event.pull_request.base.ref == 'main' && github.event.action != 'synchronize' && github.event.action != 'closed'
         run: |
           echo "----"
           echo $GITHUB_HEAD_REF
@@ -18,5 +17,3 @@ jobs:
             echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
             exit 1
           fi
-
-
