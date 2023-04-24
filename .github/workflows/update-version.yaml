@@ -7,20 +7,6 @@ on:
       - main
 
 jobs:
-  reject_pr_job:
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.head.ref != 'develop' && github.actor != 'github-actions[bot]'
-    steps:
-      - name: Check branch name
-        if: github.event.pull_request.base.ref == 'main'
-        run: |
-          echo $GITHUB_HEAD_REF
-          echo $github.actor
-          if [ $GITHUB_HEAD_REF != "develop" ]; then
-            echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
-            exit 1
-          fi
-
   run-on-merge:
     needs: reject_pr_job
     permissions: write-all
