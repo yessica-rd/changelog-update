@@ -41,11 +41,10 @@ jobs:
           git merge --no-ff origin/develop
           git remote set-url origin https://${{ secrets.GH_ACTOR }}:${{ secrets.GH_TOKEN }}@github.com/yessica-rd/changelog-update.git
           git add .
-          git commit --message "Changelog version updated 
+          git commit -m "Changelog version updated 
           
           
-          skip-checks:true
-          skip-checks:true"
+          skip-checks: true"
           git push origin main --force-with-lease --no-verify
 
       - name: create tags
