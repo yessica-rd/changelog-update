@@ -37,6 +37,7 @@ jobs:
         if: ${{env.should_add_last_changes_to_master == 'true'}}
         run: |
           git merge --no-ff origin/develop
+          git add .
           git commit --message "Changelog version updated [skip ci]"
           git push origin main
 
