@@ -9,7 +9,7 @@ on:
 jobs:
   reject_pr_job:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.head.ref != 'develop'
+    if: github.event.pull_request.head.ref == 'develop'
     steps:
       - uses: actions/checkout@v2
       - name: do-nothing
