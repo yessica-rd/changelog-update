@@ -22,7 +22,6 @@ jobs:
           state: 'success'
           sha: ${{github.event.pull_request.head.sha || github.sha}}
 
-
   run-on-merge:
     needs: reject_pr_job
     permissions: write-all
