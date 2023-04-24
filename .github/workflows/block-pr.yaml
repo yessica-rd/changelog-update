@@ -3,12 +3,12 @@ name: block-pr
 on:
   pull_request:
     branches:
-      - '**'
+      - main
 
 jobs:
   reject_pr_job:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'push' }}
+    if: ${{ github.event.pull_request.head.ref != 'develop' }}
     steps:
       - name: Check branch name
         if: github.event.pull_request.base.ref == 'main'
