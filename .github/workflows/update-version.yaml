@@ -28,14 +28,18 @@ jobs:
           echo $should_add_last_changes_to_master
           echo "should_add_last_changes_to_master=$should_add_last_changes_to_master" >> $GITHUB_ENV
 
-      - name: commit-push-changes
-        uses: actions-js/push@master
+      - name: Configure Git
+        run: |
+          git config user.name ${{ secrets.GITHUB_ACTOR }}
+          git config user.email ${{ secrets.GITHUB_EMAIL }}
+
+      - name: Push changes
         if: ${{env.should_add_last_changes_to_master == 'true'}}
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          message: "Changelog version updated"
-          tags: true
-          force: true
+        run: |
+          git checkout main
+          git merge --no-ff "$GITHUB_HEAD_REF"
+          git commit --message "Changelog version updated [skip ci]"
+          git push origin main
 
       - name: create tags
         if: ${{env.should_add_last_changes_to_master == 'true'}}
