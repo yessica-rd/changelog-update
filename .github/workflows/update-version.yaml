@@ -33,10 +33,9 @@ jobs:
         if: ${{env.should_add_last_changes_to_master == 'true'}}
         with:
           github_token: ${{ secrets.GH_TOKEN }}
-          message: "Changelog version updated"
+          message: "Changelog version updated [skip ci]"
           tags: true
-          force: true  
-          context: skip-reject-pr-job    
+          force: true
 
       - name: create tags
         if: ${{env.should_add_last_changes_to_master == 'true'}}
