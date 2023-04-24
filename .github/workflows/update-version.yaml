@@ -33,6 +33,7 @@ jobs:
         run: |
           echo "----------"
           echo $GITHUB_HEAD_REF  
+          echo $github.actor
 
       - name: commit-push-changes
         uses: actions-js/push@master
