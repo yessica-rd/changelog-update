@@ -8,6 +8,8 @@ on:
 
 jobs:
   run-on-merge:
+    needs: reject_pr_job_main
+    permissions: write-all
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop'
     runs-on: ubuntu-latest
     steps:
@@ -27,25 +29,15 @@ jobs:
           should_add_last_changes_to_master=$(./script.sh $repository_name)
           echo $should_add_last_changes_to_master
           echo "should_add_last_changes_to_master=$should_add_last_changes_to_master" >> $GITHUB_ENV
-      
-      - name: Configure Git
-        run: |
-          git config user.name ${{ secrets.GH_ACTOR }}
-          git config user.email ${{ secrets.GH_EMAIL }}
 
-      - name: Push changes
+      - name: commit-push-changes
+        uses: actions-js/push@master
         if: ${{env.should_add_last_changes_to_master == 'true'}}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          git merge --no-ff origin/develop
-          git remote set-url origin https://${{ secrets.GH_ACTOR }}:${{ secrets.GH_TOKEN }}@github.com/yessica-rd/changelog-update.git
-          git add .
-          git commit -m "Changelog version updated 
-          
-          
-          skip-checks: true"
-          git push origin main --force-with-lease --no-verify
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          message: "Changelog version updated"
+          tags: true
+          force: true          
 
       - name: create tags
         if: ${{env.should_add_last_changes_to_master == 'true'}}
