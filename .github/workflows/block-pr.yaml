@@ -22,3 +22,8 @@ jobs:
             echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
             exit 1
           fi
+      
+      - name: Call block-pr workflow
+        uses: actions/workflow-dispatch@v2
+        with:
+          workflow: block-pr.yaml
