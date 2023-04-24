@@ -9,18 +9,16 @@ on:
 jobs:
   reject_pr_job:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.head.ref != 'develop' && github.actor != 'github-actions[bot]'
     steps:
       - name: Check branch name
         if: github.event.pull_request.base.ref == 'main'
         run: |
-          echo "----"
           echo $GITHUB_HEAD_REF
+          echo $github.actor
           if [ $GITHUB_HEAD_REF != "develop" ]; then
-            echo "Entra"
             echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
             exit 1
-          else
-            echo "no entra"
           fi
 
   run-on-merge:
