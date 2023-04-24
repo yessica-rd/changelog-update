@@ -8,6 +8,7 @@ on:
 jobs:
   reject_pr_job:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'push' }}
     steps:
       - name: Check branch name
         if: github.event.pull_request.base.ref == 'main'
@@ -15,9 +16,6 @@ jobs:
           echo "----"
           echo $GITHUB_HEAD_REF
           if [ $GITHUB_HEAD_REF != "develop" ]; then
-            echo "Entra"
             echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
             exit 1
-          else
-            echo "no entra"
           fi
