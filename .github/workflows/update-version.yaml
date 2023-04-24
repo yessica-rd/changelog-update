@@ -18,12 +18,6 @@ jobs:
           persist-credentials: false
           ref: main
           token: ${{ secrets.TOKEN_CHANGELOG }}
-
-      - name: Invoke block-pr.yaml
-        uses: ./.github/workflows/block-pr.yaml
-        with:
-          GITHUB_HEAD_REF: ${{ github.event.pull_request.head.ref }}
-          GITHUB_ACTOR: ${{ github.actor }}
       
       - name: run-bash-file
         run: |
@@ -35,10 +29,13 @@ jobs:
           echo "should_add_last_changes_to_master=$should_add_last_changes_to_master" >> $GITHUB_ENV
 
       - name: echo-variables
+        env: 
+          GITHUB_CONTEXT: ${{ toJson(github) }} 
         run: |
           echo "----------"
           echo $GITHUB_HEAD_REF  
-          echo $github.actor
+          ACTOR=$(echo "$GITHUB_CONTEXT" | jq -r '.actor')
+          echo "Actor: $ACTOR"
 
       - name: commit-push-changes
         uses: actions-js/push@master
