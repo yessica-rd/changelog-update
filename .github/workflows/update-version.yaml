@@ -9,7 +9,6 @@ on:
 jobs:
   reject_pr_job:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.head.ref != 'develop' && github.actor != 'github-actions[bot]' && github.event.pull_request.base.ref == 'main' && github.event.pull_request.merged == true
     steps:
       - name: Check branch name
         env: 
