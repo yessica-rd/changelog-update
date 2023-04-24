@@ -10,17 +10,21 @@ jobs:
   reject_pr_job:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: do-nothing
-        run: echo "This job does nothing"
-      - name: Run the action # You would run your tests before this using the output to set state/desc
-        uses: Sibz/github-status-action@v1
-        with: 
-          authToken: ${{secrets.TOKEN_CHANGELOG}}
-          context: 'Test run'
-          description: 'Passed'
-          state: 'success'
-          sha: ${{github.event.pull_request.head.sha || github.sha}}
+      - name: Check branch name
+        env: 
+          GITHUB_CONTEXT: ${{ toJson(github) }} 
+        run: |
+          echo $GITHUB_HEAD_REF
+          ACTOR=$(echo "$GITHUB_CONTEXT" | jq -r '.actor')
+          echo "Actor: $ACTOR"
+          if [ $GITHUB_HEAD_REF != "develop" ]; then
+            echo "Entra"
+            echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
+            exit 1
+          else
+            echo "No entra"
+            exit 0
+          fi
 
   run-on-merge:
     needs: reject_pr_job
