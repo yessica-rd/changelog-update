@@ -32,7 +32,7 @@ jobs:
         uses: actions-js/push@master
         if: ${{env.should_add_last_changes_to_master == 'true'}}
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB }}
           message: "Changelog version updated"
           tags: true
           force: true          
