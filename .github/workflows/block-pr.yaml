@@ -11,13 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     if:
       (
-      github.event.pull_request.head.ref == 'develop' &&
+      github.event.pull_request.head.ref  != 'develop' &&
       github.event.pull_request.base.ref == 'main'
       ) ||
       (
-      github.event.pull_request.head.ref != 'main' &&
+      github.event.pull_request.head.ref == 'main' &&
       github.event.pull_request.base.ref == 'develop'
       )
+      github.event.pull_request.head.ref != 'develop' && github.event.pull_request.base.ref == 'main'
     steps:
       - name: Check branch name
         env: 
