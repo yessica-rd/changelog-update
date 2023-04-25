@@ -12,7 +12,7 @@ class ChangeTypes(Enum):
     breaking = 'breaking'
 
 
-changelog_path = "./docs/CHANGELOG.md"
+changelog_path = './CHANGELOG.md'
 
 
 def calculate_new_version(version: list[int], major=0, minor=0, patch=0) -> str:
@@ -68,6 +68,7 @@ def calculate_version_header(new_version: str, header_version_regex_common, chan
         changelog_content[:new_version_header_index - 1] + \
         new_version_header_content + \
         changelog_content[new_version_header_index:]
+    return changelog_content
 
 
 def add_changelog_footer(header_version_regex_common, changelog_content: str, new_version: str, previous_version: str):
@@ -79,6 +80,7 @@ def add_changelog_footer(header_version_regex_common, changelog_content: str, ne
         changelog_content[:new_version_footer_index] + \
         new_version_footer_content + \
         changelog_content[new_version_footer_index:]
+    return changelog_content
 
 
 def get_last_version_content(changelog_content: str) -> tuple[str, str, str, str]:
@@ -128,9 +130,9 @@ previous_version = re.findall(new_version_header_regex, changelog_content)[0]
 
 new_version = calcualte_new_version_based_on(
     previous_version, commits_from_pull_request)
-version_header = calculate_version_header(
+changelog_content = calculate_version_header(
     new_version, header_version_regex_common, changelog_content)
-add_changelog_footer(header_version_regex_common,
+changelog_content = add_changelog_footer(header_version_regex_common,
                      changelog_content, new_version, previous_version)
 last_version_content_dict = add_sections_to_changelog()
 
