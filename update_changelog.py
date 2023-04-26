@@ -121,7 +121,7 @@ def add_sections_to_changelog():
     for message_prefix, key in allowed_commits_messages.items():
         for commit in commits_from_pull_request:
             if commit.upper().startswith(message_prefix):
-                message_text = commit.split(':', maxsplit=1)
+                message_text = commit.split(':', maxsplit=1)[1]
                 if message_text.strip().capitalize() not in last_version_content_dict[key]:
                     last_version_content_dict[key].append(message_text.strip().capitalize())
     return last_version_content_dict
@@ -138,6 +138,16 @@ def convert_dictionary_to_string(dictionary: dict[str, list[str]]):
     return content
 
 
+def get_release_content_index(changelog_content: str) -> tuple[int, int]:
+    new_version, new_version_date, previous_version, previous_version_date = get_headers_from_two_latest_versions(
+            changelog_content, header_version_regex_common)
+    template_last_version = f'## [{new_version}] - {new_version_date}\n\n'
+    template_previous_version = f'## [{previous_version}] - {previous_version_date}\n\n'
+    starting_index = changelog_content.index(template_last_version) + len(template_last_version)
+    ending_index = changelog_content.index(template_previous_version)
+    return starting_index, ending_index
+
+
 with open(changelog_path, 'r') as changelog_file:
     changelog_content_base = changelog_file.read()
 
@@ -149,7 +159,6 @@ new_version_header_regex = re.compile(
     r'##\s' + header_version_regex_common + r'\s-', re.MULTILINE)
 previous_version = re.findall(new_version_header_regex, changelog_content)[0]
 
-
 new_version = calcualte_new_version_based_on(
     previous_version, commits_from_pull_request)
 changelog_content = append_version_header_to(
@@ -159,17 +168,6 @@ changelog_content = append_version_footer_to(
 last_version_content_dict = add_sections_to_changelog()
 
 there_are_valid_commits = any(last_version_content_dict.values())
-
-
-def get_release_content_index(changelog_content: str) -> tuple[int, int]:
-    new_version, new_version_date, previous_version, previous_version_date = get_headers_from_two_latest_versions(
-            changelog_content, header_version_regex_common)
-    template_last_version = f'## [{new_version}] - {new_version_date}\n\n'
-    template_previous_version = f'## [{previous_version}] - {previous_version_date}\n\n'
-    starting_index = changelog_content.index(template_last_version) + len(template_last_version)
-    ending_index = changelog_content.index(template_previous_version)
-    return starting_index, ending_index
-
 
 if there_are_valid_commits:
     last_commits_version_content_string = convert_dictionary_to_string(last_version_content_dict)
