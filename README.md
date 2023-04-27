@@ -1,9 +1,6 @@
 # changelog-update
 Testing changelog update
-Random text2rddsdsdkddfgd
-dfs
-sssddg
-s
-dssss
-s
-ssss
+
+This is a test repo to test the changelog update action.
+
+Another line to test.
