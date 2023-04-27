@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2023-04-27
+
+### Added
+
+- Create text.txt file.
+- Fix 1 testing 2.
+
+### Changed
+
+- Feat 1 testing commit.
+
+### Removed
+
+- Fix 1 testing commit.
+
 ## [3.1.0] - 2023-04-26
 
 ### Added
@@ -114,6 +129,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Project created.
 
+[3.2.0]: https://github.com/yessica-rd/changelog-update/compare/v3.2.0..v3.1.0
 [3.1.0]: https://github.com/yessica-rd/changelog-update/compare/v3.1.0..v3.0.3
 [3.0.3]: http..../compare/v3.0.3..v3.0.2
 [3.0.2]: https://github.com/yessica-rd/changelog-update/compare/v3.0.2..v3.0.1
