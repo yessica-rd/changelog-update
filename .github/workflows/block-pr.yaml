@@ -2,9 +2,10 @@ name: block-pr
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, edited]
     branches:
-      - main
       - develop
+      - main
 
 jobs:
   reject_pr_job:
