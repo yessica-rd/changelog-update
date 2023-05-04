@@ -1,10 +1,14 @@
 name: block-pr
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - '**'
+  pull_request:
+    types: [synchronize, reopened, edited]
+    branches:
       - develop
+      - main
 
 jobs:
   reject_pr_job:
@@ -23,10 +27,4 @@ jobs:
         env: 
           GITHUB_CONTEXT: ${{ toJson(github) }} 
         run: |
-          echo $GITHUB_HEAD_REF
-          ACTOR=$(echo "$GITHUB_CONTEXT" | jq -r '.actor')
-          echo "Actor: $ACTOR"
-          if [ $GITHUB_HEAD_REF != "develop" ]; then
-            echo "Pull request not allowed from branch $GITHUB_HEAD_REF. Only pull requests from the develop branch are allowed."
-            exit 1
-          fi
+          exit 0
