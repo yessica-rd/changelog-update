@@ -23,9 +23,9 @@ from enum import Enum
 
 
 class ChangeTypes(Enum):
-    feat = 'feat'
-    fix = 'fix'
-    breaking = 'breaking'
+    breaking = 'BREAKING/'
+    feat = 'FEATURE/'
+    fix = 'FIX/'
 
 
 class ReleaseCategories(Enum):
@@ -50,6 +50,10 @@ def define_file_arguments():
     return parser.parse_args()
 
 
+def change_types_regex():
+    return rf'({ChangeTypes.breaking}|{ChangeTypes.feat}|{ChangeTypes.fix})'
+
+
 # builds a dictionary containing the formatted commits messages for each category
 def create_release_dictionary_from(commits: List[str]) -> dict[ReleaseCategories, List[str]]:
     release_categories = {
@@ -70,7 +74,8 @@ def create_release_dictionary_from(commits: List[str]) -> dict[ReleaseCategories
 
     for commit_prefix, category in commit_prefix_to_category_map.items():
         for commit in commits:
-            if commit.upper().startswith(commit_prefix):
+            category_keywords = re.compile(rf'^({change_types_regex()})?{commit_prefix}.*$', re.IGNORECASE)
+            if re.search(category_keywords, commit):
                 commit_message = commit.split(':', maxsplit=1)[1]
                 if commit_message.strip().capitalize() not in release_categories[category]:
                     release_categories[category].append(commit_message.strip().capitalize())
@@ -117,12 +122,12 @@ def find_previous_version_from(changelog: str) -> str:
 def find_new_version_from(previous_version: str, commits: List[str]) -> str:
     version: List[int] = [int(number) for number in previous_version.split('.')]
     version_to_change_based_on_change_type: VersionToChangeTypeMap = {
-        ChangeTypes.breaking.value: (1, 0, 0),
-        ChangeTypes.feat.value: (0, 1, 0),
-        ChangeTypes.fix.value: (0, 0, 1)
+        ChangeTypes.breaking: (1, 0, 0),
+        ChangeTypes.feat: (0, 1, 0),
+        ChangeTypes.fix: (0, 0, 1)
     }
     change_type = get_change_type_from(commits)
-    default_change_type = version_to_change_based_on_change_type[ChangeTypes.fix.value]
+    default_change_type = version_to_change_based_on_change_type[ChangeTypes.fix]
     major, minor, patch = version_to_change_based_on_change_type.get(change_type, default_change_type)
 
     version[0] += major
@@ -133,18 +138,16 @@ def find_new_version_from(previous_version: str, commits: List[str]) -> str:
 
 
 def get_change_type_from(commits: List[str]) -> ChangeTypes:
-    commits_starting_with_breaking = r'/breaking/.*$'
-    commits_starting_with_feat = r'/feat/.*$'
-    commits_containing_breaking_changes = [commit for commit in commits if re.search(commits_starting_with_breaking, commit)]
-    commits_containing_feat_changes = [commit for commit in commits if re.search(commits_starting_with_feat, commit)]
-
+    commits_starting_with_breaking = re.compile(r'^BREAKING/.*$', re.IGNORECASE)
+    commits_containing_breaking_changes = [commit for commit in commits
+                                           if re.search(commits_starting_with_breaking, commit)]
     if commits_containing_breaking_changes:
-        return ChangeTypes.breaking.value
-
+        return ChangeTypes.breaking
+    commits_starting_with_feat = re.compile(r'^FEATURE/.*$', re.IGNORECASE)
+    commits_containing_feat_changes = [commit for commit in commits if re.search(commits_starting_with_feat, commit)]
     if commits_containing_feat_changes:
-        return ChangeTypes.feat.value
-
-    return ChangeTypes.fix.value
+        return ChangeTypes.feat
+    return ChangeTypes.fix
 
 
 # Appends to the changelog the Release Header with the following format: ## [X.Y.Z] - YYYY-MM-DD
