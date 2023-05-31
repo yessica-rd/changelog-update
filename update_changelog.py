@@ -51,7 +51,7 @@ def define_file_arguments():
 
 
 def change_types_regex():
-    return rf'({ChangeTypes.breaking}|{ChangeTypes.feat}|{ChangeTypes.fix})'
+    return rf'({ChangeTypes.breaking.value}|{ChangeTypes.feat.value}|{ChangeTypes.fix.value})'
 
 
 # builds a dictionary containing the formatted commits messages for each category
@@ -71,7 +71,10 @@ def create_release_dictionary_from(commits: List[str]) -> dict[ReleaseCategories
         'FIX:': ReleaseCategories.fixed.value,
         'REMOVE:': ReleaseCategories.removed.value,
     }
-
+    version_change_keywords = re.compile(rf'^({change_types_regex()}).*$', re.IGNORECASE)
+    version_change_commits = [commit for commit in commits if re.match(version_change_keywords, commit)]
+    if len(version_change_commits) == 0:
+        return release_categories
     for commit_prefix, category in commit_prefix_to_category_map.items():
         for commit in commits:
             category_keywords = re.compile(rf'^({change_types_regex()})?{commit_prefix}.*$', re.IGNORECASE)
