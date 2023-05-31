@@ -185,11 +185,7 @@ def get_headers_from_two_latest_releases(changelog_content: str) -> Tuple[str, s
     return latest_release_header, second_latest_release_header
 
 
-FILE_ARGUMENTS = define_file_arguments()
-commits: List[str] = FILE_ARGUMENTS.pull_request_commits.split('\n')
-release_section = create_release_dictionary_from(commits) if is_there_version_change(commits) else {}
-are_there_commits_to_include = any(release_section.values())
-if are_there_commits_to_include:
+def update_changelog_version() -> None:
     with open('./CHANGELOG.md', 'r+') as changelog_file:
         current_changelog = copy.deepcopy(changelog_file.read())
         new_version, previous_version = find_versions_from(current_changelog, commits)
@@ -209,3 +205,12 @@ if are_there_commits_to_include:
 
         with open('VERSION', 'w') as version_file:
             version_file.write(f'v{new_version}')
+
+
+FILE_ARGUMENTS = define_file_arguments()
+commits: List[str] = FILE_ARGUMENTS.pull_request_commits.split('\n')
+release_section = create_release_dictionary_from(commits) if is_there_version_change(commits) else {}
+are_there_commits_to_include = any(release_section.values())
+
+if are_there_commits_to_include:
+    update_changelog_version()
